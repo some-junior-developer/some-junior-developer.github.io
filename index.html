@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Decryption</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <style>
+    body {
+      background: #121212;
+      color: #eee;
+      font-family: monospace, monospace;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+    }
+    .container {
+      max-width: 400px;
+      background: #1e1e1e;
+      padding: 2rem;
+      border-radius: 10px;
+      box-shadow: 0 0 15px #0ff;
+    }
+    input, button {
+      width: 100%;
+      padding: 0.5rem;
+      margin: 0.8rem 0;
+      border-radius: 6px;
+      border: none;
+      font-size: 1rem;
+      background: #333;
+      color: #eee;
+    }
+    button {
+      background: #0ff;
+      color: #000;
+      font-weight: bold;
+      cursor: pointer;
+    }
+    #result {
+      margin-top: 1rem;
+      word-wrap: break-word;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h2>Enter password to decrypt flag</h2>
+    <input type="password" id="password" placeholder="Decryption password" />
+    <button id="decrypt-btn">Decrypt Flag</button>
+    <div id="result"></div>
+  </div>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js"></script>
+  <script>
+    // [DEBUG] password for decryption is "j6ka6HByAYjwAML5hCVjGXsAGRnRmsn4"
+
+    // AES-256 encrypted flag (base64 encoded)
+    const encryptedFlag = "U2FsdGVkX1/MljMe3xfQ08vwfqyFi3UbimUsSmWmGVjMbgIeHQbodk9g+mWAN/BxkM3lQbWHQTmp2zz39MQVuQ==";
+
+    document.getElementById('decrypt-btn').onclick = function () {
+      const password = document.getElementById('password').value;
+      try {
+        const decrypted = CryptoJS.AES.decrypt(encryptedFlag, password);
+        const plaintext = decrypted.toString(CryptoJS.enc.Utf8);
+        if (plaintext) {
+          document.getElementById('result').textContent = "Flag: " + plaintext;
+        } else {
+          document.getElementById('result').textContent = "Wrong password or corrupted data.";
+        }
+      } catch (e) {
+        document.getElementById('result').textContent = "Error during decryption.";
+      }
+    };
+  </script>
+</body>
+</html>
